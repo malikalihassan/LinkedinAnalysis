@@ -27,7 +27,7 @@ chrome_options.add_argument("--start-maximized")
 
 
 
- # Update the path to your chromedriver
+ # Update the path to your chrome driver
 driver = webdriver.Chrome( options=chrome_options)
 
 # LinkedIn login URL
@@ -43,23 +43,23 @@ def linkedin_login():
     time.sleep(10)
     display = Display(visible=0, size=(800, 600))
     display.start()
-    # Enter credentials
+   
     try:
         driver.find_element(By.ID, "username").send_keys(Email)
     except:
         print("username is already there")
     driver.find_element(By.ID, "password").send_keys(password)
     
-    # Click login button
+    
     driver.find_element(By.XPATH, "//button[@type='submit']").click()
     
-    # Wait for login to complete
+    # Wait for login to complete. Extra time on first login in order to perform 2f.
     time.sleep(300)
     
-    # Save cookies to file
+   
     pickle.dump(driver.get_cookies(), open("cookies.pkl", "wb"))
 
-# Load cookies to bypass login
+
 def load_cookies():
     try:
         if os.path.exists("cookies.pkl"):
@@ -121,7 +121,7 @@ def exp(soup):
         return experiences
 
 def extract_about_section(soup: BeautifulSoup) -> str:
-    # Find the section with the specific class
+
     about_section = soup.find('section', class_='artdeco-card pv-profile-card break-words mt2')
     
     if about_section:
@@ -134,7 +134,7 @@ def extract_about_section(soup: BeautifulSoup) -> str:
 def extract_skills(soup: BeautifulSoup) -> list:
     # Find all sections
     sections = soup.find_all('section', class_='artdeco-card pv-profile-card break-words mt2')
-    # print(sections)
+ 
     for section in sections:
         
         # Look for the section with the 'Services' heading
@@ -153,13 +153,10 @@ def extract_skills(soup: BeautifulSoup) -> list:
 
 
 def get_profile_link():
-    # Step 1: Navigate to LinkedIn home page
- 
     
-    # Allow the page to load
     time.sleep(5)
     
-    # Step 2: Locate the profile link element from the homepage
+   
     try:
         profile_link = driver.find_element(By.XPATH, "//a[contains(@class, 'ember-view') and contains(@class, 'block') and contains(@href, '/in/')]")
         return profile_link.get_attribute('href')
@@ -227,7 +224,7 @@ def scrape_profile(profile_url):
 def analyze_analyze_data(data):
     
     client = OpenAI(
-    # This is the default and can be omitted
+   
     api_key= GPT_API_KEY,
     )
     
